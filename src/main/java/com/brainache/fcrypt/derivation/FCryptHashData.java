@@ -3,7 +3,7 @@ package com.brainache.fcrypt.derivation;
 import com.brainache.fcrypt.FCrypt;
 import com.brainache.fcrypt.FCrypt.Version;
 import com.brainache.fcrypt.FResult;
-import com.brainache.fcrypt.utils.ByteGod;
+import com.brainache.utils.ByteGod;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;

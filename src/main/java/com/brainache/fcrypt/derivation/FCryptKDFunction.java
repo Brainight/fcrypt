@@ -1,6 +1,7 @@
 package com.brainache.fcrypt.derivation;
 
 import com.brainache.fcrypt.exceptions.UnknownKeyDerivationAlgorithm;
+import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
 
 public enum FCryptKDFunction {
@@ -67,6 +68,15 @@ public enum FCryptKDFunction {
 
     public int getResultingKeyLengthInBytes() {
         return hashLength/8;
+    }
+    
+    public int getFCryptTotalLength(){
+        int length = 3 + // Version Length + separator
+                3 + // KDF + separator
+                this.saltLength + 
+                getResultingKeyLengthInBytes() +
+                4; // iterations
+        return ByteGod.getB64LengthForInputLength(length, false);         
     }
 
     public HashId getHashId() {

@@ -2,7 +2,7 @@ package com.brainache.fcrypt;
 
 import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
-import com.brainache.fcrypt.utils.ByteGod;
+import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;

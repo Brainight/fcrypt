@@ -9,10 +9,28 @@ import com.brainache.fcrypt.derivation.FCryptKDFunction;
  */
 public interface FCryptVerifier {
 
+    /**
+     * Verifies a given password against a FCrypt hash using a given KDF.
+     * @param password
+     * @param hashedPassword
+     * @return 
+     */
     FResult verify(byte[] password, byte[] hashedPassword);
 
+        /**
+     * Verifies a given password against a FCrypt hash using a given KDF.
+     * @param password
+     * @param hashedPassword
+     * @return 
+     */
     FResult verify(char[] password, char[] hashedPassword);
 
+        /**
+     * Verifies a given password against a FCrypt hash using a given KDF.
+     * @param password
+     * @param hashedPassword
+     * @return 
+     */
     FResult verify(char[] password, String hashedPassword);
 
     FCryptKDFunction getKdf();

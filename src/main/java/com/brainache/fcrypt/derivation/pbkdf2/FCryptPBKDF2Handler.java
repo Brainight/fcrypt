@@ -5,7 +5,7 @@ import com.brainache.fcrypt.FResult;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
 import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFHandler;
-import com.brainache.fcrypt.utils.ByteGod;
+import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
