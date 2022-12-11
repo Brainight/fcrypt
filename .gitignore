@@ -1,2 +1,5 @@
 target/*
 .gitattributes
+*.class
+*.lst
+*.jar
