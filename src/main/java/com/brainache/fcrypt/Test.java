@@ -1,6 +1,5 @@
 package com.brainache.fcrypt;
 
-import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
 import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
@@ -15,17 +14,24 @@ import java.util.Random;
 public class Test {
 
     public static void main(String[] args) {
-        byte[] data = FCrypt.derivator(FCryptKDFunction.PBKDF2_WITH_HMAC_SHA256).hide("Password".toCharArray());
-        data[7] = 0x34;
-        FResult res = FCrypt.verifier(FCryptKDFunction.PBKDF2_WITH_HMAC_SHA256).verify("Password".toCharArray(), ByteGod.byteArrayToCharArrayBE255(data));
+//        byte[] data = FCrypt.derivator(FCryptKDFunction.PBKDF2_WITH_HMAC_SHA256).hide("Password".toCharArray());
+//        data[7] = 0x34;
+//        FResult res = FCrypt.verifier(FCryptKDFunction.PBKDF2_WITH_HMAC_SHA256).verify("Password".toCharArray(), ByteGod.byteArrayToCharArrayBE255(data));
+//        System.out.println(new String(data, StandardCharsets.UTF_8));
+//        if(!res.isValid()){
+//            System.out.println(res.getMsg());
+//        }
+//        
+//        System.out.println(new String(data, StandardCharsets.UTF_8));
+//        System.out.println(new String(((FCryptHashData)res.getTarget()).value(), StandardCharsets.UTF_8));
+        byte[] data = FCrypt.derivator(FCryptKDFunction.BRAINIGHT_V1).hide("Password".toCharArray());
+        System.out.println(ByteGod.getUTF8(data));
+        FResult res = FCrypt.verifier(FCryptKDFunction.BRAINIGHT_V1).verify("Password".toCharArray(), ByteGod.byteArrayToCharArrayBE255(data));
         System.out.println(new String(data, StandardCharsets.UTF_8));
-        if(!res.isValid()){
+        if (!res.isValid()) {
             System.out.println(res.getMsg());
         }
-        
-        System.out.println(new String(data, StandardCharsets.UTF_8));
-        System.out.println(new String(((FCryptHashData)res.getTarget()).value(), StandardCharsets.UTF_8));
-       
+
     }
 
     public static void profile() {

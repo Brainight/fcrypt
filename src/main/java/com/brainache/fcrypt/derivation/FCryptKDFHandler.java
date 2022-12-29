@@ -12,7 +12,7 @@ public abstract class FCryptKDFHandler implements FCryptHasher, FCryptVerifier{
     
     protected final FCryptKDFunction kdf;
 
-    public FCryptKDFHandler(FCryptKDFunction kdf) {
+    protected FCryptKDFHandler(FCryptKDFunction kdf) {
         this.kdf = kdf;
     }
 

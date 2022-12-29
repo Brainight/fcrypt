@@ -24,15 +24,13 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
     }
 
     @Override
-    public FResult verify(byte[] password, byte[] hiddenPassword) {
-        char[] ps = ByteGod.byteArrayToCharArrayBE(password);
-        ByteGod.zeroOut(password);
-        return _verify(ps, hiddenPassword);
+    public FResult verify(char[] password, byte[] hiddenPassword) {
+        return _verify(password, hiddenPassword);
     }
 
     @Override
     public FResult verify(char[] password, char[] hiddenPassword) {
-        byte[] hp = ByteGod.charArrayToByteArrayBE255(hiddenPassword);
+        byte[] hp = ByteGod.charToByteUTF8(hiddenPassword);
         ByteGod.zeroOut(hiddenPassword);
         return _verify(password, hp);
     }
@@ -92,7 +90,7 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
             System.err.println("Error occurred during derivation process using: " + this.kdf.getName());
         }
 
-        return new FCryptHashData(FCrypt.VERSION.getIDBytes(), kdf, salt, iterations, hiddenPassword);
+        return new FCryptHashData(FCrypt.VERSION.getIDBytes(), kdf, salt, iterations, hiddenPassword, hiddenPassword);
     }
 
     private KeySpec getKeySpec(char[] password, byte[] salt, int iterations) {

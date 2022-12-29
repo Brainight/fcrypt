@@ -20,13 +20,15 @@ public class FCryptHashData {
     private final byte[] salt;
     private final int iterations;
     private final byte[] hash;
+    private final byte[] secretKey;
 
-    public FCryptHashData(byte[] version, FCryptKDFunction derivation, byte[] salt, int iterations, byte[] hash) {
+    public FCryptHashData(byte[] version, FCryptKDFunction derivation, byte[] salt, int iterations, byte[] hash, byte[] secretKey) {
         this.version = version;
         this.derivation = derivation;
         this.salt = salt;
         this.iterations = iterations;
         this.hash = hash;
+        this.secretKey = secretKey;
     }
 
     public static FResult buildFrom(byte[] fcryptHash) {
@@ -104,7 +106,7 @@ public class FCryptHashData {
         
         iterations = ByteGod.bytesToIntBE(ByteGod.decodeB64(encodedIterations));
 
-        FCryptHashData data = new FCryptHashData(version.getIDBytes(), kdf, salt, iterations, hash);
+        FCryptHashData data = new FCryptHashData(version.getIDBytes(), kdf, salt, iterations, hash, null);
         return new FResult(data, true, "Valid Password!");
 
     }
@@ -139,6 +141,10 @@ public class FCryptHashData {
 
     public byte[] getHash() {
         return hash;
+    }
+
+    public byte[] getSecretKey() {
+        return secretKey;
     }
 
     public byte[] getVersion() {

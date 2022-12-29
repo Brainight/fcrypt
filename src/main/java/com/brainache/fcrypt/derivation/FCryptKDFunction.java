@@ -6,24 +6,27 @@ import java.nio.charset.StandardCharsets;
 
 public enum FCryptKDFunction {
 
-    PBKDF2_WITH_HMAC_SHA1("PBKDF2WithHmacSHA1", new HashId((byte) 'A', (byte) '1'), 16, 128),
-    PBKDF2_WITH_HMAC_SHA256("PBKDF2WithHmacSHA256", new HashId((byte) 'A', (byte) '2'), 16, 256),
-    PBKDF2_WITH_HMAC_SHA512("PBKDF2WithHmacSHA512", new HashId((byte) 'A', (byte) '3'), 16, 512);
-
+    PBKDF2_WITH_HMAC_SHA1("PBKDF2WithHmacSHA1", "PBKDF2WithHmacSHA1", new HashId((byte) 'A', (byte) '1'), 16, 128),
+    PBKDF2_WITH_HMAC_SHA256("PBKDF2WithHmacSHA256", "PBKDF2WithHmacSHA256", new HashId((byte) 'A', (byte) '2'), 16, 256),
+    PBKDF2_WITH_HMAC_SHA512("PBKDF2WithHmacSHA512", "PBKDF2WithHmacSHA512", new HashId((byte) 'A', (byte) '3'), 16, 512),
+    BRAINIGHT_V1("BRAINIGHT_V1", "PBKDF2WithHmacSHA256", new HashId((byte)'B', (byte)'1'), 16, 256);
+    
+    public final String stringId;
     public final String fkda;
     public final HashId id;
     public final int saltLength;
     public final int hashLength;
 
-    FCryptKDFunction(String fkda, HashId id, int saltLength, int length) {
+    FCryptKDFunction(String stringId, String fkda, HashId id, int saltLength, int length) {
+        this.stringId = stringId;
         this.fkda = fkda;
         this.id = id;
         this.saltLength = saltLength;
         this.hashLength = length;
     }
 
-    public static FCryptKDFunction value(String fkda) throws UnknownKeyDerivationAlgorithm {
-        switch (fkda) {
+    public static FCryptKDFunction value(String stringId) throws UnknownKeyDerivationAlgorithm {
+        switch (stringId) {
             case "PBKDF2WithHmacSHA1":
                 return FCryptKDFunction.PBKDF2_WITH_HMAC_SHA1;
 
@@ -32,8 +35,12 @@ public enum FCryptKDFunction {
 
             case "PBKDF2WithHmacSHA512":
                 return FCryptKDFunction.PBKDF2_WITH_HMAC_SHA512;
+                
+            case "BRAINIGHT_V1":
+                return FCryptKDFunction.BRAINIGHT_V1;
+                
             default:
-                throw new UnknownKeyDerivationAlgorithm("Unknown key derivation algorithm: '" + fkda + "'");
+                throw new UnknownKeyDerivationAlgorithm("Unknown key derivation algorithm: '" + stringId + "'");
 
         }
     }
@@ -55,6 +62,9 @@ public enum FCryptKDFunction {
             case "A3":
                 kdf = PBKDF2_WITH_HMAC_SHA512;
                 break;
+            case "B1":
+                kdf = BRAINIGHT_V1;
+                break;
             default:
                 kdf = null;
         }
@@ -62,6 +72,9 @@ public enum FCryptKDFunction {
         return kdf;
     }
 
+    public String getId(){
+        return this.stringId;
+    }
     public String getName() {
         return this.fkda;
     }

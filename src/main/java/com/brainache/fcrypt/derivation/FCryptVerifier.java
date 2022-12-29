@@ -15,7 +15,7 @@ public interface FCryptVerifier {
      * @param hashedPassword
      * @return 
      */
-    FResult verify(byte[] password, byte[] hashedPassword);
+    FResult verify(char[] password, byte[] hashedPassword);
 
         /**
      * Verifies a given password against a FCrypt hash using a given KDF.
