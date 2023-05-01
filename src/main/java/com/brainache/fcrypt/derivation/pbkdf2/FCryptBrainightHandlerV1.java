@@ -1,19 +1,18 @@
 package com.brainache.fcrypt.derivation.pbkdf2;
 
+import brainight.jutils.Bytes;
+import brainight.jutils.Encoder;
 import com.brainache.fcrypt.FCrypt;
 import com.brainache.fcrypt.FResult;
 import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFHandler;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
-import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -29,7 +28,7 @@ import javax.crypto.spec.PBEKeySpec;
  */
 public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
 
-    private static final String PASSPHRASE = "D0bbyIsAFree3lf";
+    private static final String PASSPHRASE = "NutrioJabalinoso";
     
     public FCryptBrainightHandlerV1(FCryptKDFunction kdf) {
         super(kdf);
@@ -42,8 +41,8 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
 
     @Override
     public FResult verify(char[] password, char[] hiddenPassword) {
-        byte[] hp = ByteGod.charToByteUTF8(hiddenPassword);
-        ByteGod.zeroOut(hiddenPassword);
+        byte[] hp = Bytes.toBytes(hiddenPassword);
+        Bytes.zeroOut(hiddenPassword);
         return _verify(password, hp);
     }
 
@@ -69,12 +68,12 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
     @Override
     public byte[] hide(char[] password) {
 
-        byte[] salt = ByteGod.getSecureRandomBytes(this.kdf.saltLength);
+        byte[] salt = Bytes.getSecureRandomBytes(this.kdf.saltLength);
         int iterations = (int) (Math.random() * 100000);
         iterations = iterations > 50000 ? iterations : iterations << 1;
 
         FCryptHashData data = _hide(password, salt, iterations);
-        ByteGod.zeroOut(password);
+        Bytes.zeroOut(password);
         if (!data.isValid()) {
             return null;
         }
@@ -84,18 +83,18 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
 
     @Override
     public byte[] hide(byte[] password) {
-        char[] ps = ByteGod.byteArrayToCharArrayBE(password);
-        ByteGod.zeroOut(password);
+        char[] ps = Bytes.toChars(password);
+        Bytes.zeroOut(password);
         return hide(ps);
     }
     
     public FCryptHashData hideAsData(char[] password){
-        byte[] salt = ByteGod.getSecureRandomBytes(this.kdf.saltLength);
+        byte[] salt = Bytes.getSecureRandomBytes(this.kdf.saltLength);
         int iterations = (int) (Math.random() * 100000);
         iterations = iterations > 50000 ? iterations : iterations << 1;
 
         FCryptHashData data = _hide(password, salt, iterations);
-        ByteGod.zeroOut(password);
+        Bytes.zeroOut(password);
         return data;
     }
 
@@ -147,8 +146,8 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
         Cipher cipher = Cipher.getInstance("ChaCha20");
         ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(new byte[12], 0);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, paramSpec);
-        byte[] eData = cipher.doFinal(ByteGod.getUTF8(PASSPHRASE));
-        byte[] hash = ByteGod.getSHA256(eData);
+        byte[] eData = cipher.doFinal(Encoder.getUTF8(PASSPHRASE));
+        byte[] hash = Bytes.getSHA256(eData);
         return hash;
         
     }

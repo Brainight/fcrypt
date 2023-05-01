@@ -1,9 +1,10 @@
 package com.brainache.fcrypt.derivation;
 
+import brainight.jutils.Bytes;
+import brainight.jutils.Encoder;
 import com.brainache.fcrypt.FCrypt;
 import com.brainache.fcrypt.FCrypt.Version;
 import com.brainache.fcrypt.FResult;
-import com.brainache.utils.ByteGod;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
@@ -73,24 +74,24 @@ public class FCryptHashData {
         }
 
         // Getting salt
-        int encodedSaltLength = ByteGod.getB64LengthForInputLength(kdf.saltLength, false);
+        int encodedSaltLength = Encoder.getB64LengthForInputLength(kdf.saltLength, false);
         if (bb.remaining() < encodedSaltLength) {
             return new FResult(fcryptHash, false, "Hash is too small to be a FCrypt Hash. Unable to get salt.");
         }
         byte[] encodedSalt = new byte[encodedSaltLength];
         bb.get(encodedSalt);
 
-        salt = ByteGod.decodeB64(encodedSalt);
+        salt = Encoder.decodeB64(encodedSalt);
 
         // Getting hash
-        int encodedHashLength = ByteGod.getB64LengthForInputLength(kdf.getResultingKeyLengthInBytes(), false);
+        int encodedHashLength = Encoder.getB64LengthForInputLength(kdf.getResultingKeyLengthInBytes(), false);
         if (bb.remaining() < encodedSaltLength) {
             return new FResult(fcryptHash, false, "Hash is too small to be a FCrypt Hash. Unable to get hash.");
         }
 
         byte[] encodedHash = new byte[encodedHashLength];
         bb.get(encodedHash);
-        hash = ByteGod.decodeB64(encodedHash);
+        hash = Encoder.decodeB64(encodedHash);
 
         // Getting iterations
         if (bb.remaining() < 7) {
@@ -104,7 +105,7 @@ public class FCryptHashData {
         byte[] encodedIterations = new byte[6];
         bb.get(encodedIterations);
         
-        iterations = ByteGod.bytesToIntBE(ByteGod.decodeB64(encodedIterations));
+        iterations = Bytes.bytesToIntBE(Encoder.decodeB64(encodedIterations));
 
         FCryptHashData data = new FCryptHashData(version.getIDBytes(), kdf, salt, iterations, hash, null);
         return new FResult(data, true, "Valid Password!");
@@ -113,9 +114,9 @@ public class FCryptHashData {
 
     public byte[] value() {
 
-        byte[] b64Hash = ByteGod.encodeB64(hash, false);
-        byte[] b64Salt = ByteGod.encodeB64(salt, false);
-        byte[] b64Iterations = ByteGod.encodeB64(ByteGod.intToBytesBE(iterations), false);
+        byte[] b64Hash = Encoder.encodeB64(hash, false);
+        byte[] b64Salt = Encoder.encodeB64(salt, false);
+        byte[] b64Iterations = Encoder.encodeB64(Bytes.intToBytesBE(iterations), false);
         int resultLength = 6 + b64Salt.length + b64Hash.length + 1 + b64Iterations.length;
 
         ByteBuffer bb = ByteBuffer.allocate(resultLength);

@@ -12,8 +12,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.brainache</groupId>
-            <artifactId>brainache-utils</artifactId>
+            <groupId>brainight</groupId>
+            <artifactId>jutils</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

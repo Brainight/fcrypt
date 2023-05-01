@@ -1,11 +1,11 @@
 package com.brainache.fcrypt.derivation.pbkdf2;
 
+import brainight.jutils.Bytes;
 import com.brainache.fcrypt.FCrypt;
 import com.brainache.fcrypt.FResult;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
 import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFHandler;
-import com.brainache.utils.ByteGod;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -30,8 +30,8 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
 
     @Override
     public FResult verify(char[] password, char[] hiddenPassword) {
-        byte[] hp = ByteGod.charToByteUTF8(hiddenPassword);
-        ByteGod.zeroOut(hiddenPassword);
+        byte[] hp = Bytes.toBytes(hiddenPassword);
+        Bytes.zeroOut(hiddenPassword);
         return _verify(password, hp);
     }
 
@@ -47,22 +47,22 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
         }
 
         FCryptHashData data = (FCryptHashData) res.getTarget();
-        if(data.getDerivation() != this.kdf){
+        if (data.getDerivation() != this.kdf) {
             return new FResult(data, false, "Hidden password was created a different key derivation algorithm than selected. Selected: " + this.kdf + ", hiddenPasswordKDF: " + data.getDerivation());
         }
-        FCryptHashData hash = ((FCryptPBKDF2Handler)FCrypt.derivator(data.getDerivation()))._hide(password, data.getSalt(), data.getIterations());
+        FCryptHashData hash = ((FCryptPBKDF2Handler) FCrypt.derivator(data.getDerivation()))._hide(password, data.getSalt(), data.getIterations());
         return new FResult(hash, hash.equals(data), hash.equals(data) ? null : "Invalid password.");
     }
 
     @Override
     public byte[] hide(char[] password) {
 
-        byte[] salt = ByteGod.getSecureRandomBytes(this.kdf.saltLength);
+        byte[] salt = Bytes.getSecureRandomBytes(this.kdf.saltLength);
         int iterations = (int) (Math.random() * 100000);
         iterations = iterations > 50000 ? iterations : iterations << 1;
 
         FCryptHashData data = _hide(password, salt, iterations);
-        ByteGod.zeroOut(password);
+        Bytes.zeroOut(password);
         if (!data.isValid()) {
             return null;
         }
@@ -72,11 +72,10 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
 
     @Override
     public byte[] hide(byte[] password) {
-        char[] ps = ByteGod.byteArrayToCharArrayBE(password);
-        ByteGod.zeroOut(password);
+        char[] ps = Bytes.toChars(password);
+        Bytes.zeroOut(password);
         return hide(ps);
     }
-
 
     private FCryptHashData _hide(char[] password, byte[] salt, int iterations) {
         byte[] hiddenPassword = null;
