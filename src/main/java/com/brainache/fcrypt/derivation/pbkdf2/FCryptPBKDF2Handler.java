@@ -1,6 +1,7 @@
 package com.brainache.fcrypt.derivation.pbkdf2;
 
 import brainight.jutils.Bytes;
+import brainight.jutils.Encoder;
 import com.brainache.fcrypt.FCrypt;
 import com.brainache.fcrypt.FResult;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
@@ -30,7 +31,7 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
 
     @Override
     public FResult verify(char[] password, char[] hiddenPassword) {
-        byte[] hp = Bytes.toBytes(hiddenPassword);
+        byte[] hp = Encoder.toBytes(hiddenPassword);
         Bytes.zeroOut(hiddenPassword);
         return _verify(password, hp);
     }
@@ -72,7 +73,7 @@ public class FCryptPBKDF2Handler extends FCryptKDFHandler {
 
     @Override
     public byte[] hide(byte[] password) {
-        char[] ps = Bytes.toChars(password);
+        char[] ps = Encoder.toChars(password);
         Bytes.zeroOut(password);
         return hide(ps);
     }

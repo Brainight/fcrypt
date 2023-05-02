@@ -26,10 +26,10 @@ import javax.crypto.spec.PBEKeySpec;
  *
  * @author brainight
  */
-public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
+public class FCryptBrainightHandlerV1 extends FCryptKDFHandler {
 
     private static final String PASSPHRASE = "NutrioJabalinoso";
-    
+
     public FCryptBrainightHandlerV1(FCryptKDFunction kdf) {
         super(kdf);
     }
@@ -41,7 +41,7 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
 
     @Override
     public FResult verify(char[] password, char[] hiddenPassword) {
-        byte[] hp = Bytes.toBytes(hiddenPassword);
+        byte[] hp = Encoder.toBytes(hiddenPassword);
         Bytes.zeroOut(hiddenPassword);
         return _verify(password, hp);
     }
@@ -58,7 +58,7 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
         }
 
         FCryptHashData data = (FCryptHashData) res.getTarget();
-        if(data.getDerivation() != this.kdf){
+        if (data.getDerivation() != this.kdf) {
             return new FResult(data, false, "Hidden password was created a different key derivation algorithm than selected. Selected: " + this.kdf + ", hiddenPasswordKDF: " + data.getDerivation());
         }
         FCryptHashData hash = this._hide(password, data.getSalt(), data.getIterations());
@@ -83,12 +83,12 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
 
     @Override
     public byte[] hide(byte[] password) {
-        char[] ps = Bytes.toChars(password);
+        char[] ps = Encoder.toChars(password);
         Bytes.zeroOut(password);
         return hide(ps);
     }
-    
-    public FCryptHashData hideAsData(char[] password){
+
+    public FCryptHashData hideAsData(char[] password) {
         byte[] salt = Bytes.getSecureRandomBytes(this.kdf.saltLength);
         int iterations = (int) (Math.random() * 100000);
         iterations = iterations > 50000 ? iterations : iterations << 1;
@@ -97,7 +97,6 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
         Bytes.zeroOut(password);
         return data;
     }
-
 
     private FCryptHashData _hide(char[] password, byte[] salt, int iterations) {
         byte[] secretKey = null;
@@ -141,16 +140,15 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler{
     public FCryptKDFunction getKdf() {
         return this.kdf;
     }
-    
-    private byte[] generateHash(SecretKey secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+
+    private byte[] generateHash(SecretKey secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance("ChaCha20");
         ChaCha20ParameterSpec paramSpec = new ChaCha20ParameterSpec(new byte[12], 0);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, paramSpec);
         byte[] eData = cipher.doFinal(Encoder.getUTF8(PASSPHRASE));
         byte[] hash = Bytes.getSHA256(eData);
         return hash;
-        
+
     }
 
-    
 }
