@@ -1,11 +1,11 @@
 package com.brainache.fcrypt.derivation;
 
-import static com.brainache.fcrypt.derivation.FCryptKDFunction.BRAINIGHT_V1;
 import static com.brainache.fcrypt.derivation.FCryptKDFunction.PBKDF2_WITH_HMAC_SHA256;
-import com.brainache.fcrypt.derivation.pbkdf2.FCryptBrainightHandlerV1;
+import com.brainache.fcrypt.derivation.pbkdf2.FCryptWeedHandler;
 import com.brainache.fcrypt.derivation.pbkdf2.FCryptPBKDF2Handler;
 import java.util.HashMap;
 import java.util.Map;
+import static com.brainache.fcrypt.derivation.FCryptKDFunction.WEED;
 
 /**
  *
@@ -29,8 +29,8 @@ public class FCryptKDFHandlerFactory {
             case PBKDF2_WITH_HMAC_SHA512:
                 handler = new FCryptPBKDF2Handler(df);
                 break;
-            case BRAINIGHT_V1:
-                handler = new FCryptBrainightHandlerV1(BRAINIGHT_V1);
+            case WEED:
+                handler = new FCryptWeedHandler(WEED);
                 break;
             default:
                 handler = new FCryptPBKDF2Handler(PBKDF2_WITH_HMAC_SHA256);

@@ -7,6 +7,7 @@ import com.brainache.fcrypt.FResult;
 import com.brainache.fcrypt.derivation.FCryptHashData;
 import com.brainache.fcrypt.derivation.FCryptKDFHandler;
 import com.brainache.fcrypt.derivation.FCryptKDFunction;
+import com.brainache.fcrypt.exceptions.FCryptException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -26,11 +27,11 @@ import javax.crypto.spec.PBEKeySpec;
  *
  * @author brainight
  */
-public class FCryptBrainightHandlerV1 extends FCryptKDFHandler {
+public class FCryptWeedHandler extends FCryptKDFHandler {
 
-    private static final String PASSPHRASE = "NutrioJabalinoso";
+    private static final String PASSPHRASE = "WeExistEvenDead";
 
-    public FCryptBrainightHandlerV1(FCryptKDFunction kdf) {
+    public FCryptWeedHandler(FCryptKDFunction kdf) {
         super(kdf);
     }
 
@@ -86,6 +87,26 @@ public class FCryptBrainightHandlerV1 extends FCryptKDFHandler {
         char[] ps = Encoder.toChars(password);
         Bytes.zeroOut(password);
         return hide(ps);
+    }
+
+    public byte[] hash(byte[] password, int iterations) throws FCryptException {
+        if (password == null || password.length < 7) {
+            throw new FCryptException("Password must be at least 7 charactets long");
+        }
+
+        iterations = (iterations < 0) ? 0xaa * 0x49 : iterations * 0x49;
+
+        byte[] b = Encoder.getUTF8(PASSPHRASE);
+        byte[] salt = new byte[16];
+        byte[] b1 = Bytes.intToBytesBE(iterations);
+        System.arraycopy(b, 0, salt, 0, b.length);
+        salt = Bytes.xor(salt, b1);
+        
+        char[] p = Encoder.toChars(password);
+        Bytes.zeroOut(password);
+        
+        FCryptHashData data = _hide(p, salt, iterations);
+        return data.getHash();
     }
 
     public FCryptHashData hideAsData(char[] password) {

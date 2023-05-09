@@ -9,7 +9,7 @@ public enum FCryptKDFunction {
     PBKDF2_WITH_HMAC_SHA1("PBKDF2WithHmacSHA1", "PBKDF2WithHmacSHA1", new HashId((byte) 'A', (byte) '1'), 16, 128),
     PBKDF2_WITH_HMAC_SHA256("PBKDF2WithHmacSHA256", "PBKDF2WithHmacSHA256", new HashId((byte) 'A', (byte) '2'), 16, 256),
     PBKDF2_WITH_HMAC_SHA512("PBKDF2WithHmacSHA512", "PBKDF2WithHmacSHA512", new HashId((byte) 'A', (byte) '3'), 16, 512),
-    BRAINIGHT_V1("BRAINIGHT_V1", "PBKDF2WithHmacSHA256", new HashId((byte)'B', (byte)'1'), 16, 256);
+    WEED("WEED", "PBKDF2WithHmacSHA256", new HashId((byte)'B', (byte)'1'), 16, 256);
     
     public final String stringId;
     public final String fkda;
@@ -37,7 +37,7 @@ public enum FCryptKDFunction {
                 return FCryptKDFunction.PBKDF2_WITH_HMAC_SHA512;
                 
             case "BRAINIGHT_V1":
-                return FCryptKDFunction.BRAINIGHT_V1;
+                return FCryptKDFunction.WEED;
                 
             default:
                 throw new UnknownKeyDerivationAlgorithm("Unknown key derivation algorithm: '" + stringId + "'");
@@ -63,7 +63,7 @@ public enum FCryptKDFunction {
                 kdf = PBKDF2_WITH_HMAC_SHA512;
                 break;
             case "B1":
-                kdf = BRAINIGHT_V1;
+                kdf = WEED;
                 break;
             default:
                 kdf = null;
