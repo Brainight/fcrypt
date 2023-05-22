@@ -52,7 +52,7 @@ public class FCryptWeedHandler extends FCryptKDFHandler {
         return _verify(password, hiddenPassword.getBytes(StandardCharsets.UTF_8));
     }
 
-    public FResult _verify(char[] password, byte[] hiddenPassword) {
+    private FResult _verify(char[] password, byte[] hiddenPassword) {
         FResult res = FCryptHashData.buildFrom(hiddenPassword);
         if (!res.isValid()) {
             return res;
