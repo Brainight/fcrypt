@@ -95,7 +95,7 @@ public class FCryptHashData {
 
         // Getting iterations
         if (bb.remaining() < 7) {
-            return new FResult(fcryptHash, false, "Hash is too small to be a FCrypt Hash. Unable to get hash.");
+            return new FResult(fcryptHash, false, "Hash is too small to be a FCrypt Hash. Unable to get iterations.");
         }
         
         if(bb.get() != SEPARATOR){

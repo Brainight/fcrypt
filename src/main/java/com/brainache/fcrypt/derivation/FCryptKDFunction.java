@@ -9,7 +9,7 @@ public enum FCryptKDFunction {
     PBKDF2_WITH_HMAC_SHA1("PBKDF2WithHmacSHA1", "PBKDF2WithHmacSHA1", new HashId((byte) 'A', (byte) '1'), 16, 128),
     PBKDF2_WITH_HMAC_SHA256("PBKDF2WithHmacSHA256", "PBKDF2WithHmacSHA256", new HashId((byte) 'A', (byte) '2'), 16, 256),
     PBKDF2_WITH_HMAC_SHA512("PBKDF2WithHmacSHA512", "PBKDF2WithHmacSHA512", new HashId((byte) 'A', (byte) '3'), 16, 512),
-    WEED("WEED", "PBKDF2WithHmacSHA256", new HashId((byte)'B', (byte)'1'), 16, 256);
+    WEED("WEED", "PBKDF2WithHmacSHA256", new HashId((byte)'W', (byte)'D'), 16, 256);
     
     public final String stringId;
     public final String fkda;

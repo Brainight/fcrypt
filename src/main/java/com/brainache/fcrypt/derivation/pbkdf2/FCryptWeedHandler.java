@@ -103,9 +103,9 @@ public class FCryptWeedHandler extends FCryptKDFHandler {
         salt = Bytes.xor(salt, b1);
         
         char[] p = Encoder.toChars(password);
-        Bytes.zeroOut(password);
         
         FCryptHashData data = _hide(p, salt, iterations);
+        Bytes.zeroOut(p);
         return data.getHash();
     }
 
