@@ -62,7 +62,7 @@ public enum FCryptKDFunction {
             case "A3":
                 kdf = PBKDF2_WITH_HMAC_SHA512;
                 break;
-            case "B1":
+            case "WD":
                 kdf = WEED;
                 break;
             default:
